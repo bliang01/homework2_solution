@@ -1,6 +1,8 @@
 #ifndef __homework2_linalg_h
 #define __homework2_linalg_h
 
+// EXAMPLE FUNCTION DOCS
+//
 /*
   vec_add
 
@@ -21,14 +23,14 @@
   out : double*
     (Output by reference.) The sum of `v` and `w`.
 */
-void vec_add(double*, double*, double*, int);
+void vec_add(double* out, double* v, double* w, int N);
 
-void vec_sub(double*, double*, double*, int);
+void vec_sub(double* out, double* v, double* w, int N);
 
-double vec_norm(double*, int);
+double vec_norm(double* v, int N);
 
-void mat_add(double*, double*, double*, int, int);
+void mat_add(double* out, double* A, double* B, int M, int N);
 
-void mat_vec(double*, double*, double*, int, int);
+void mat_vec(double* out, double* A, double* x, int M, int N);
 
 #endif

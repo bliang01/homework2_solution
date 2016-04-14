@@ -1,6 +1,16 @@
 #include "linalg.h"
 #include <math.h>
 
+// EXAMPLE *OPTIONAL* FUNCTION DOCS
+//
+// (only write about tricky implementation details here)
+/*
+  vec_add
+
+  We use the advanced method of computing the sum of two elements of an array
+  and storing the result in a third array. It's all very complex so I must talk
+  about it here.
+*/
 void vec_add(double* out, double* v, double* w, int N)
 {
   for (int i=0; i<N; ++i)
