@@ -112,3 +112,51 @@ def mat_vec(A, x):
         raise AttributeError("Something wrong happened when calling the C "
                              "library function.")
     return out
+
+def solve_lower_triangular(L, b):
+    # ensure that the data types of arrays are double and contiuguize the result
+    L = numpy.ascontiguousarray(L.astype(numpy.double))
+    b = numpy.ascontiguousarray(b.astype(numpy.double))
+    out = numpy.empty_like(b)
+    M,N = L.shape
+
+    if (M != N):
+        raise ValueError('Matrix L must be square.')
+    if (N != len(b)):
+        raise ValueError('Dimension mismatch')
+
+    # set function types and call on data
+    try:
+        homework2library.solve_lower_triangular.restype = c_void_p
+        homework2library.solve_lower_triangular.argtypes = [
+            c_void_p, c_void_p, c_void_p, c_int]
+        homework2library.solve_lower_triangular(
+            out.ctypes.data, L.ctypes.data, b.ctypes.data, N)
+    except AttributeError:
+        raise AttributeError("Something wrong happened when calling the C "
+                             "library function.")
+    return out
+
+def solve_upper_triangular(U, b):
+    # ensure that the data types of arrays are double and contiuguize the result
+    U = numpy.ascontiguousarray(U.astype(numpy.double))
+    b = numpy.ascontiguousarray(b.astype(numpy.double))
+    out = numpy.empty_like(b)
+    M,N = U.shape
+
+    if (M != N):
+        raise ValueError('Matrix U must be square.')
+    if (N != len(b)):
+        raise ValueError('Dimension mismatch')
+
+    # set function types and call on data
+    try:
+        homework2library.solve_upper_triangular.restype = c_void_p
+        homework2library.solve_upper_triangular.argtypes = [
+            c_void_p, c_void_p, c_void_p, c_int]
+        homework2library.solve_upper_triangular(
+            out.ctypes.data, U.ctypes.data, b.ctypes.data, N)
+    except AttributeError:
+        raise AttributeError("Something wrong happened when calling the C "
+                             "library function.")
+    return out
