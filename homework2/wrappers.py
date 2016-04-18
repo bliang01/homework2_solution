@@ -160,3 +160,28 @@ def solve_upper_triangular(U, b):
         raise AttributeError("Something wrong happened when calling the C "
                              "library function.")
     return out
+
+
+def jacobi(A, b, epsilon=1e-8):
+    # ensure that the data types of arrays are double and contiuguize the result
+    A = numpy.ascontiguousarray(A.astype(numpy.double))
+    b = numpy.ascontiguousarray(b.astype(numpy.double))
+    out = numpy.empty_like(b)
+    M,N = A.shape
+
+    if (M != N):
+        raise ValueError('Matrix A must be square.')
+    if (N != len(b)):
+        raise ValueError('Dimension mismatch')
+
+    # set function types and call on data
+    try:
+        homework2library.jacobi.restype = c_void_p
+        homework2library.jacobi.argtypes = [
+            c_void_p, c_void_p, c_void_p, c_int, c_double]
+        homework2library.jacobi(
+            out.ctypes.data, A.ctypes.data, b.ctypes.data, N, epsilon)
+    except AttributeError:
+        raise AttributeError("Something wrong happened when calling the C "
+                             "library function.")
+    return out

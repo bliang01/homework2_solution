@@ -4,6 +4,7 @@ from numpy import array
 from numpy.linalg import norm
 from numpy.random import randn
 from scipy.linalg import solve_triangular as scipy_solve_triangular
+from scipy.linalg import solve as scipy_solve
 
 from homework2 import (
     vec_add,
@@ -13,6 +14,7 @@ from homework2 import (
     mat_vec,
     solve_lower_triangular,
     solve_upper_triangular,
+    jacobi,
 )
 
 def random_lower_triangular(n):
@@ -86,6 +88,24 @@ class TestSolver(unittest.TestCase):
         error = norm(y - y_actual)
         self.assertAlmostEqual(error, 0)
 
+    def test_jacobi(self):
+        # create random sdd matrix
+        A = randn(5,5) + numpy.diag(5*numpy.ones(5))
+        b = randn(5)
+        y_actual = scipy_solve(A,b)
+        y = jacobi(A,b)
+        error = norm(y - y_actual)
+        self.assertLess(error, 1e-4)
+
+    # def test_gauss_seidel(self):
+    #     # create random sdd matrix
+    #     A = randn(5,5) + numpy.diag(5*numpy.ones(5))
+    #     b = randn(5)
+    #     y_actual = scipy_solve(A,b)
+    #     y = gauss_seidel(A,b)
+    #     error = norm(y - y_actual)
+    #     self.assertLess(error, 1e-4)
+
 
 def time_lower_triangular(n, number=3):
     # returns the average time to perform a random nxn lower triangular solve
@@ -119,24 +139,44 @@ b = randn(N)
     avg_time = total_time / number
     return avg_time
 
+def time_jacobi(n, number=1):
+    # returns the average time to perform a random nxn lower triangular solve
+    from timeit import timeit
+
+    s = '''
+from numpy import diag, ones
+from numpy.random import randn
+from homework2 import jacobi
+N = %d
+A = randn(N,N) + diag(N*ones(N))
+b = randn(N)
+'''%(n)
+    total_time = timeit('jacobi(A,b)', setup=s, number=number)
+    avg_time = total_time / number
+    return avg_time
+
 
 if __name__ == '__main__':
-    print '\n===== Timing Code ====='
-    n = 2**8
-    t = time_lower_triangular(n, number=10)
-    print 'lower triangular(%d): %f'%(n, t)
+    # print '\n===== Timing Code ====='
+    # n = 2**8
+    # t = time_lower_triangular(n, number=10)
+    # print 'lower triangular(%d): %f'%(n, t)
 
-    n = 2**12
-    t = time_lower_triangular(n)
-    print 'lower triangular(%d): %f'%(n, t)
+    # n = 2**12
+    # t = time_lower_triangular(n)
+    # print 'lower triangular(%d): %f'%(n, t)
 
-    n = 2**8
-    t = time_upper_triangular(n, number=10)
-    print 'upper triangular(%d): %f'%(n, t)
+    # n = 2**8
+    # t = time_upper_triangular(n, number=10)
+    # print 'upper triangular(%d): %f'%(n, t)
 
-    n = 2**12
-    t = time_upper_triangular(n)
-    print 'upper triangular(%d): %f'%(n, t)
+    # n = 2**12
+    # t = time_upper_triangular(n)
+    # print 'upper triangular(%d): %f'%(n, t)
+
+    n = 2**13
+    t = time_jacobi(n)
+    print 'jacobi(%d): %f'%(n, t)
 
     print '\n===== Running Tests ====='
     unittest.main(verbosity=2)
