@@ -223,7 +223,8 @@ responses to the following questions:
    
    </code></pre>
    
-   Answer the following questions about your implementation:
+   See the example notebook `Scratch.nb` for a demonstrations. Answer the
+   following questions about your implementation:
    
    * Does this function have a contiguous memory access pattern?
    * Assuming the cache create a copy of memory *at* and *after* a requested /
