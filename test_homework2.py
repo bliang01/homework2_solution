@@ -15,6 +15,7 @@ from homework2 import (
     solve_lower_triangular,
     solve_upper_triangular,
     jacobi,
+    gauss_seidel,
 )
 
 def random_lower_triangular(n):
@@ -93,22 +94,36 @@ class TestSolver(unittest.TestCase):
         A = randn(5,5) + numpy.diag(5*numpy.ones(5))
         b = randn(5)
         y_actual = scipy_solve(A,b)
-        y = jacobi(A,b)
+        y,_ = jacobi(A,b)
         error = norm(y - y_actual)
         self.assertLess(error, 1e-4)
 
-    # def test_gauss_seidel(self):
-    #     # create random sdd matrix
-    #     A = randn(5,5) + numpy.diag(5*numpy.ones(5))
-    #     b = randn(5)
-    #     y_actual = scipy_solve(A,b)
-    #     y = gauss_seidel(A,b)
-    #     error = norm(y - y_actual)
-    #     self.assertLess(error, 1e-4)
+    def test_gauss_seidel(self):
+        # create random sdd matrix
+        A = randn(5,5) + numpy.diag(5*numpy.ones(5))
+        b = randn(5)
+        y_actual = scipy_solve(A,b)
+        y,_ = gauss_seidel(A,b)
+        error = norm(y - y_actual)
+        self.assertLess(error, 1e-4)
+
+    def test_convergence_rate(self):
+        # tests to see if the student's Gauss-seidel function has the correct
+        # related convergence rate to the Jacobi method. in other words, Jacobi
+        # should converge faster
+        n = 10
+        A = randn(n,n) + numpy.diag(n*numpy.ones(n))
+        b = randn(n)
+        _,iter_jacobi = jacobi(A,b,epsilon=1e-12)
+        _,iter_gs = gauss_seidel(A,b,epsilon=1e-12)
+
+        print 'iter_jacobi:', iter_jacobi
+        print 'iter_gs:', iter_gs
+        self.assertLess(iter_gs, iter_jacobi)
 
 
 def time_lower_triangular(n, number=3):
-    # returns the average time to perform a random nxn lower triangular solve
+    # returns the time to perform a random nxn lower triangular solve
     from timeit import timeit
 
     s = '''
@@ -124,7 +139,7 @@ b = randn(N)
     return avg_time
 
 def time_upper_triangular(n, number=3):
-    # returns the average time to perform a random nxn lower triangular solve
+    # returns the time to perform a random nxn upper triangular solve
     from timeit import timeit
 
     s = '''
@@ -155,28 +170,31 @@ b = randn(N)
     avg_time = total_time / number
     return avg_time
 
+def time_gauss_seidel(n, number=1):
+    # returns the average time to perform a random nxn lower triangular solve
+    from timeit import timeit
+
+    s = '''
+from numpy import diag, ones
+from numpy.random import randn
+from homework2 import gauss_seidel
+N = %d
+A = randn(N,N) + diag(N*ones(N))
+b = randn(N)
+'''%(n)
+    total_time = timeit('gauss_seidel(A,b)', setup=s, number=number)
+    avg_time = total_time / number
+    return avg_time
+
 
 if __name__ == '__main__':
-    # print '\n===== Timing Code ====='
-    # n = 2**8
-    # t = time_lower_triangular(n, number=10)
-    # print 'lower triangular(%d): %f'%(n, t)
-
-    # n = 2**12
-    # t = time_lower_triangular(n)
-    # print 'lower triangular(%d): %f'%(n, t)
-
-    # n = 2**8
-    # t = time_upper_triangular(n, number=10)
-    # print 'upper triangular(%d): %f'%(n, t)
-
-    # n = 2**12
-    # t = time_upper_triangular(n)
-    # print 'upper triangular(%d): %f'%(n, t)
-
-    n = 2**13
+    #n = 2**13
+    n = 2**10
     t = time_jacobi(n)
     print 'jacobi(%d): %f'%(n, t)
+
+    t = time_gauss_seidel(n)
+    print 'gauss_seidel(%d): %f'%(n, t)
 
     print '\n===== Running Tests ====='
     unittest.main(verbosity=2)

@@ -33,18 +33,14 @@ void solve_upper_triangular(double* out, double* U, double* b, int N)
   * copy `out` to stack
   * copy diagonal elements of `A` to stack vector
  */
-void jacobi(double* out, double* A, double* b, int N, double epsilon)
+int jacobi(double* out, double* A, double* b, int N, double epsilon)
 {
   // create temporary stack storage and initialize `out`
+  int num_iter = 0;
   double prev[N];
   double rhs[N];
-  //double diag[N];
   for (int i=0; i<N; ++i)
-    {
-      out[i] = 0;
-      //diag[i] = A[i*N + i];
-    }
-
+    out[i] = 0;
 
   double error = 1;
   while (error > epsilon)
@@ -70,5 +66,54 @@ void jacobi(double* out, double* A, double* b, int N, double epsilon)
       // overwrite it, anyway, at the top of the loop
       vec_sub(prev, out, prev, N);
       error = vec_norm(prev, N);
+      ++num_iter;
     }
+
+  return num_iter;
+}
+
+/*
+  Possible performance considerations:
+  * copy `out` to stack
+  * copy diagonal elements of `A` to stack vector
+ */
+int gauss_seidel(double* out, double* A, double* b, int N, double epsilon)
+{
+  // create temporary stack storage and initialize `out`
+  int num_iter = 0;
+  double prev[N];
+  double rhs[N];
+  for (int i=0; i<N; ++i)
+    out[i] = 0;
+
+  double error = 1;
+  while (error > epsilon)
+    {
+      // update: set prev to out
+      //for (int i=0; i<N; ++i)
+      //  prev[i] = out[i];
+
+      // compute: rhs = b - L*prev
+      //
+      // write a custom left-only mat-mul in-place
+      for (int i=0; i<N; ++i)
+        {
+          prev[i] = out[i];
+          rhs[i] = 0.0;
+          for (int j=0; j<i; ++j)
+            rhs[i] += A[i*N + j]*prev[j];
+        }
+      vec_sub(rhs, b, rhs, N);
+
+      // solve the upper triangular system
+      solve_upper_triangular(out, A, rhs, N);
+
+      // compute error: use prev to store (out - prev). we will immediately
+      // overwrite it, anyway, at the top of the loop
+      vec_sub(prev, out, prev, N);
+      error = vec_norm(prev, N);
+      ++num_iter;
+    }
+
+  return num_iter;
 }
