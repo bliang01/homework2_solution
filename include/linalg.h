@@ -1,8 +1,6 @@
 #ifndef __homework2_linalg_h
 #define __homework2_linalg_h
 
-// EXAMPLE FUNCTION DOCS
-//
 /*
   vec_add
 
@@ -11,7 +9,7 @@
   Parameters
   ----------
   out : double*
-    The resulting sum vector. (Output by reference.)
+    Storage for the resulting sum vector.
   v : double*
   w : double*
     The two vectors to sum.

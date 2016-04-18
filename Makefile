@@ -4,10 +4,11 @@ CFLAGS=-c -Wall -fPIC
 LDFLAGS=--shared
 
 # target
-LIBTARGET=homework2.so
+LIBTARGET=libhomework2.so
 
 # directories
 SRC=src
+
 LIB=lib
 INCLUDE=include
 
