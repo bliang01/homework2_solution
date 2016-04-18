@@ -3,6 +3,7 @@
 
 # Python files
 *.pyc
+.ipynb_checkpoints
 
 # Object files
 *.o
