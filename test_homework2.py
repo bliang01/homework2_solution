@@ -149,9 +149,6 @@ class TestSolver(unittest.TestCase):
         # we test the iteration count in a given range to account for some
         # numerical and (slight) algorithmic variability
         _, num_iterations = gauss_seidel(A, b)
-        print
-        print num_iterations
-        print
         self.assertTrue(25 < num_iterations < 45)
 
 def time_lower_triangular(n, number=3):
