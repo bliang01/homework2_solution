@@ -18,7 +18,7 @@ Repository layout:
   
   Please read the docstrings in this file to see how to call the wrapper and
   what kind of information is expected to be returned. Although you are not
-  required to understand the source code of these wrappers it's is, nonetheless,
+  required to understand the source code of these wrappers it is, nonetheless,
   useful information.
 
 * `include/`:
