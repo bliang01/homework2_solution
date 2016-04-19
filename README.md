@@ -43,6 +43,12 @@ Repository layout:
   `homework2/wrappers.py`. Aside from writing your own tests and performing
   computations for your report, everything you need to write for this homework
   will be put in the files `src/linalg.h` and `src/solvers.h`.
+  
+* `ctests/`:
+
+  Directory in which to place any optional C code used to debug and test your
+  library as well as practice compiling and linking C code. See the file
+  `ctests/example.c` for more information and on how to compile.
     
 * `Makefile`: See *"Compiling and Testing"* below.
 
@@ -60,7 +66,7 @@ Run,
 $ make lib
 ```
 
-to create `libhomework2.so`. This library must exist in order for the Python
+to create `lib/libhomework2.so`. This library must exist in order for the Python
 wrappers to work. As a shortcut, running
 
 ```
@@ -74,14 +80,13 @@ $ make lib
 $ python test_homework2.py
 ```
 
-
 ## Assignment
 
 Provide the definitions for the following functions. The functions that return
 by reference do so with a variable (in all cases, an array) named `out`. All
-vectors are represented by arrays and all matrices are represented, as usual, by
-long arrays. That is, an *M*-by-*N* matirx *A* is represented by an array of
-length *MN*.
+vectors are represented by arrays and all matrices are represented by long
+arrays. That is, an *M*-by-*N* matirx *A* is represented by an array of length
+*MN*.
 
 **In `include/linalg.h` and `src/linalg.c`:**
 
@@ -232,7 +237,7 @@ responses to the following questions:
      inefficiencies? Why or why not?
  
 3. Just as in 2. above, copy the code you wrote for `gauss_seidel` and paste it
-   into a markdown cell with the nice code formatting. Answer the following
+   into a markdown cell with nice code formatting. Answer the following
    questions about your implemenation:
    
    * What are the memory requirements as a function of `n`, the system size? You

@@ -38,6 +38,7 @@ double vec_norm(double* v, int N)
   return sqrt(norm);
 }
 
+// represent out, A, and B by arrays of length M*N
 void mat_add(double* out, double* A, double* B, int M, int N)
 {
   // note that this has good access patterns
@@ -50,6 +51,7 @@ void mat_add(double* out, double* A, double* B, int M, int N)
     }
 }
 
+// represent A by an array of length M*N
 void mat_vec(double* out, double* A, double* x, int M, int N)
 {
   // A is (M x N)
