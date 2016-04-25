@@ -175,6 +175,7 @@ Your implementations will be run through the following test suite:
 For the following tests, let `A` be an `n`-by-`n` 5-diagonal matrix consisting
 of "5" along the main diagonal and "-1" on the (-2),(-1),(+1), and (+2)
 off-diagonals and the vector `b` be the vector `[0, 1, 2, ..., n-1]`.
+Additionally, use an initial guess (`x0`, in the previous hw) of all zeros.
 
 * Does `jacobi` return an approximate solution to the system *Ax = b* for
   various `n`?
