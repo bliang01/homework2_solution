@@ -42,7 +42,7 @@ Repository layout:
   functions are called.* Doing so will break the Python wrappers located in
   `homework2/wrappers.py`. Aside from writing your own tests and performing
   computations for your report, everything you need to write for this homework
-  will be put in the files `src/linalg.h` and `src/solvers.h`.
+  will be put in the files `src/linalg.c` and `src/solvers.c`.
   
 * `ctests/`:
 
