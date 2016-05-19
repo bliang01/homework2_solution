@@ -56,7 +56,7 @@ Almost all of you have this correct! The few mistakes I saw were
 
 * Very few had these incorrect, missing initialization was the only common issue I observed.
 * Most people have misunderstood what Part 2 of Question 2 was asking. There seems to also be a confusion regarding **contiguous** memory access and **cache creating a copy of memory** at and after a requested location.
-	* Part 1: Since the matrix is stored in "row-dominant" order,   you would have contiguous memory access as long as in your `solve_upper_triangular` your outer index goes over rows and your inner index goes over the columns. There will be only non-contiguous memory access when you would divide by the diagonal elements of `U` in the outer loop.
+	* Part 1: Since the matrix is stored in "row-dominant" order,   you would have contiguous memory access as long as in your `solve_upper_triangular` your outer index goes over rows and your inner index goes over the columns. There will be only one non-contiguous memory access when you would divide by the diagonal elements of `U` in the outer loop.
 	* Part 2: `solve_upper_triangular` uses back substitution, we start at row N-1 and go "backwards" to row 0. If the cache creates a copy of the memory *at and after* row N-1, then it would have a copy of the one non-zero element in row N-1, but that is the last element. For row N-2, it would create a copy of the second-last and last column entries of U, and maybe the copy a few 0s from the last row, first few columns. This is an inefficiency, most of the cached copies are not useful in back substitution. This pattern will be observed as the rows reduce towards row 0.
 
 ### For `jacobi` and `gauss_seidel`:
