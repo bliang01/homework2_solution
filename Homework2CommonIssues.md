@@ -1,7 +1,9 @@
 # How to read the results of grading
 You should see in your private repositories
 1. `test_homework2_solution.py`: The test suit used to grade the assignments. The performance was tested by timing your `gauss_seidel` code for 4 different problem sizes: 128, 512, 1024 and 2048. More details on this below in the specific issues section.
+
 2. `output.txt`: The raw output when I ran the tests
+
 3. `result.txt`: The parsed test and timing results. I have not used the `jacobi` timings in your performance grades.
 
 You should also see comments in your Canvas grade book for any errors I caught. The points were scaled to the rubric determined for Homework 2.
@@ -22,32 +24,35 @@ You should also see comments in your Canvas grade book for any errors I caught. 
 ### For `linalg.c`:
 Almost all of you have this correct! The few mistakes I saw were
 * Incorrect declarations:
-	    ```c
-             double vec_norm(double* v, int N)
-             {
-    		int norm = 0;
-    		for (int i=0; i<N; ++i)
-      		 {
-            	   norm += v[i] * v[i];
-        		  }
-    		return norm = sqrt(norm);
-	      }```
-   Here `norm` needs to be a `double`, not an integer.
+	```c
+     double vec_norm(double* v, int N)
+     {
+    	int norm = 0;
+    	for (int i=0; i<N; ++i)
+      {
+        norm += v[i] * v[i];
+      }
+    	return norm = sqrt(norm);
+	    }```
+
+	 Here `norm` needs to be a `double`, not an integer.
+
 *  Missing initialization:
 	```c
-             double vec_norm(double* v, int N)
-             {
-    		double norm;
-    		for (int i=0; i<N; ++i)
-      		 {
-            	   norm += v[i] * v[i];
-        		  }
-    		return norm = sqrt(norm);
-	      }```
+    double vec_norm(double* v, int N)
+    {
+    	double norm;
+    	for (int i=0; i<N; ++i)
+      {
+        norm += v[i] * v[i];
+      }
+    	return norm = sqrt(norm);
+	   }```
    Here `norm` needs to be initialized to `0` before using it.
 
 ### For `solve_upper_triangular` or `solve_lower_triangular`:
-* Very few had these incorrect, missing initialization was the only common issue I observed.
+
+Very few had these incorrect, missing initialization was the only common issue I observed.
 
 ### For `jacobi` and `gauss_seidel`:
 
