@@ -166,8 +166,10 @@ def mat_vec(A, x):
     # ensure data types of arrays are double and contiguize the result
     A = numpy.ascontiguousarray(A.astype(numpy.double))
     x = numpy.ascontiguousarray(x.astype(numpy.double))
-    out = numpy.empty_like(x)
     M,N = A.shape
+
+    # see issue uphpsc-2016/syllabus#30
+    out = numpy.ascontiguousarray(numpy.zeros(M, dtype=numpy.double))
 
     if (N != len(x)):
         raise ValueError('Dimension mismatch.')
@@ -183,6 +185,44 @@ def mat_vec(A, x):
         raise AttributeError("Something wrong happened when calling the C "
                              "library function.")
     return out
+
+def mat_mat(A, B):
+    """Returns the sum of two matrices.
+
+    Parameters
+    ----------
+    A : array
+      An `M`x`N` matrix.
+    B : array
+      An `N`x`K` matrix.
+
+    Returns
+    -------
+    out : array
+        The `M`x`K` matrix product `A` and `B`.
+    """
+    # ensure data types of arrays are double and contiguize the result
+    A = numpy.ascontiguousarray(A.astype(numpy.double))
+    B = numpy.ascontiguousarray(B.astype(numpy.double))
+    M, N = A.shape
+    N_B, K = B.shape
+    out = numpy.ascontiguousarray(numpy.zeros((M,K)).astype(numpy.double))
+
+    if (N != N_B):
+        raise ValueError('Dimension mismatch.')
+
+    # set function types and call on data
+    try:
+        homework2library.mat_mat.restype = c_void_p
+        homework2library.mat_mat.argtypes = [
+            c_void_p, c_void_p, c_void_p, c_int, c_int, c_int]
+        homework2library.mat_mat(
+            out.ctypes.data, A.ctypes.data, B.ctypes.data, M, N, K);
+    except AttributeError:
+        raise AttributeError("Something wrong happened when calling the C "
+                             "library function.")
+    return out
+
 
 def solve_lower_triangular(L, b):
     """Solves the system `Lx = b` when L is lower-triangular.

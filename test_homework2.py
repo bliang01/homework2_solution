@@ -12,6 +12,7 @@ from homework2 import (
     vec_norm,
     mat_add,
     mat_vec,
+    mat_mat,
     solve_lower_triangular,
     solve_upper_triangular,
     jacobi,
@@ -73,40 +74,66 @@ class TestLinalg(unittest.TestCase):
         self.assertAlmostEqual(error, 0)
 
     def test_vec_norm(self):
-        x = array([1,2,3])
+        x = randn(17)
         n_actual = norm(x)
         n = vec_norm(x)
         self.assertAlmostEqual(n_actual, n)
 
     def test_mat_add(self):
-        A = randn(5,5)
-        B = randn(5,5)
+        A = randn(31,31)
+        B = randn(31,31)
         C = mat_add(A,B)
         error = norm(C - (A+B))
         self.assertAlmostEqual(error, 0)
 
     def test_mat_vec(self):
-        A = randn(5,5)
-        x = randn(5)
+        A = randn(13,13)
+        x = randn(13)
         y_actual = A.dot(x)
         y = mat_vec(A,x)
         error = norm(y - y_actual)
         self.assertAlmostEqual(error, 0)
 
+    def test_mat_mat(self):
+        A = randn(29,29)
+        B = randn(29,29)
+        C = mat_mat(A,B)
+        C_actual = numpy.dot(A,B)
+        error = norm(C - C_actual)
+        self.assertAlmostEqual(error, 0)
+
 class TestSolver(unittest.TestCase):
-    def test_solve_lower_trangular(self):
-        # create a random lower triangular matrix
-        L = random_lower_triangular(5)
-        b = randn(5)
+    def test_solve_lower_triangular_diagonal(self):
+        # create a random diagonal matrix
+        L = diag(randn(23)) + 23*numpy.diag(numpy.ones(23))
+        b = randn(23)
         y_actual = scipy_solve_triangular(L,b,lower=True)
         y = solve_lower_triangular(L,b)
         error = norm(y - y_actual)
         self.assertAlmostEqual(error, 0)
 
-    def test_solve_upper_trangular(self):
+    def test_solve_lower_triangular(self):
+        # create a random lower triangular matrix
+        L = random_lower_triangular(23) + 23*numpy.diag(numpy.ones(23))
+        b = randn(23)
+        y_actual = scipy_solve_triangular(L,b,lower=True)
+        y = solve_lower_triangular(L,b)
+        error = norm(y - y_actual)
+        self.assertAlmostEqual(error, 0)
+
+    def test_solve_upper_triangular_diagonal(self):
+        # create a random diagonal matrix
+        U = diag(randn(23)) + 23*numpy.diag(numpy.ones(23))
+        b = randn(23)
+        y_actual = scipy_solve_triangular(U,b)
+        y = solve_upper_triangular(U,b)
+        error = norm(y - y_actual)
+        self.assertAlmostEqual(error, 0)
+
+    def test_solve_upper_triangular(self):
         # create a random upper triangular matrix
-        U = random_upper_triangular(5)
-        b = randn(5)
+        U = random_upper_triangular(23) + 23*numpy.diag(numpy.ones(23))
+        b = randn(23)
         y_actual = scipy_solve_triangular(U,b)
         y = solve_upper_triangular(U,b)
         error = norm(y - y_actual)
@@ -114,21 +141,41 @@ class TestSolver(unittest.TestCase):
 
     def test_jacobi(self):
         # create random sdd matrix
-        A = randn(5,5) + 5*numpy.diag(numpy.ones(5))
-        b = randn(5)
+        A = randn(37,37) + 37*numpy.diag(numpy.ones(37))
+        b = randn(37)
         y_actual = scipy_solve(A,b)
         y,_ = jacobi(A,b)
         error = norm(y - y_actual)
         self.assertLess(error, 1e-4)
 
+    def test_jacobi_epsilon(self):
+        # create random sdd matrix
+        A = randn(37,37) + 37*numpy.diag(numpy.ones(37))
+        b = randn(37)
+        epsilon=1e-12
+        y_actual = scipy_solve(A,b)
+        y,_ = jacobi(A,b)
+        error = norm(y - y_actual)
+        self.assertLess(error, 1e-8)
+
     def test_gauss_seidel(self):
         # create random sdd matrix
-        A = randn(5,5) + 5*numpy.diag(numpy.ones(5))
-        b = randn(5)
+        A = randn(37,37) + 37*numpy.diag(numpy.ones(37))
+        b = randn(37)
         y_actual = scipy_solve(A,b)
         y,_ = gauss_seidel(A,b)
         error = norm(y - y_actual)
         self.assertLess(error, 1e-4)
+
+    def test_gauss_seidel_epsilon(self):
+        # create random sdd matrix
+        A = randn(37,37) + 37*numpy.diag(numpy.ones(37))
+        b = randn(37)
+        epsilon=1e-12
+        y_actual = scipy_solve(A,b)
+        y,_ = gauss_seidel(A,b)
+        error = norm(y - y_actual)
+        self.assertLess(error, 1e-8)
 
     def test_jacobi_iteration_count(self):
         n = 10
@@ -215,6 +262,14 @@ b = randn(N)
     avg_time = total_time / number
     return avg_time
 
+
+def print_time_jacobi(n=2**10):
+    t = time_jacobi(n)
+    print '\n%f'%(t)
+
+def print_time_gauss_seidel(n=2**10):
+    t = time_gauss_seidel(n)
+    print '\n%f'%(t)
 
 if __name__ == '__main__':
     print '\n===== Timings ====='
