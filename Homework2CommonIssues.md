@@ -33,7 +33,8 @@ Almost all of you have this correct! The few mistakes I saw were
         norm += v[i] * v[i];
       }
     	return norm = sqrt(norm);
-	    }```
+	    }
+	```
 
 	 Here `norm` needs to be a `double`, not an integer.
 
@@ -47,7 +48,8 @@ Almost all of you have this correct! The few mistakes I saw were
         norm += v[i] * v[i];
       }
     	return norm = sqrt(norm);
-	    }```
+	    }
+	```
    Here `norm` needs to be initialized to `0` before using it.
 
 ### For `solve_upper_triangular` or `solve_lower_triangular`:
